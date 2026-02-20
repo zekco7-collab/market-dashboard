@@ -180,7 +180,8 @@ export default function App() {
   const fetchAll = useCallback(async () => {
     setError(null);
     const autoIds = INDICATORS.filter((i) => i.autoFetch).map((i) => i.id);
-    for (const id of autoIds) {
+    for (let i = 0; i < autoIds.length; i++) {
+      const id = autoIds[i];
       setLoadingStates((prev) => ({ ...prev, [id]: true }));
       try {
         const data = await fetchIndicatorData(id);
@@ -192,6 +193,7 @@ export default function App() {
       } finally {
         setLoadingStates((prev) => ({ ...prev, [id]: false }));
       }
+      if (i < autoIds.length - 1) await new Promise((r) => setTimeout(r, 2000));
     }
     setLastUpdated(new Date());
   }, []);
@@ -250,4 +252,4 @@ export default function App() {
       </div>
     </div>
   );
-                }
+    }
